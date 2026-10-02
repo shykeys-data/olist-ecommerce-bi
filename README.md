@@ -65,4 +65,4 @@ Turned **9 linked raw tables** into a clean **star schema**:
 [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) on Kaggle (CC BY-NC-SA 4.0). The raw data is not stored in this repo; the notebook downloads it.
 
 ---
-👤 **Oluwaseyi**: Community Manager & Business Development, building data and BI skills · [LinkedIn](#)
+👤 **Oluwaseyi**: Community Manager & Business Development, building data and BI skills · [LinkedIn](https://www.linkedin.com/in/oluwaseyi-o-601915b5/)
