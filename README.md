@@ -17,8 +17,8 @@ An end-to-end BI project on **~100,000 real orders** from Olist, Brazil's larges
 | Week | Stage | Status |
 |---|---|---|
 | 1 | Data pipeline & star schema | ✅ Done |
-| 2 | KPIs, cohort retention, RFM segmentation | 🔜 Next |
-| 3 | Interactive Streamlit dashboard (live link) | ⏳ Planned |
+| 2 | KPIs, cohort retention, RFM segmentation | ✅ Done |
+| 3 | Interactive Streamlit dashboard (live link) | 🔜 Next |
 | 4 | Executive summary & recommendations | ⏳ Planned |
 
 ## Week 1: Data pipeline & star schema
@@ -55,6 +55,19 @@ Turned **9 linked raw tables** into a clean **star schema**:
 | Delivered late | 6.8% |
 | Average review score | 4.16 / 5 |
 | Customers who ordered more than once | **3.1%** |
+
+## Week 2: KPIs, retention & customer segments
+📓 [`notebooks/02_kpis_retention_segments.ipynb`](notebooks/02_kpis_retention_segments.ipynb)
+
+**What I did:** a monthly KPI layer in SQL, cohort retention analysis, RFM segmentation into 7 action-ready segments, and hypothesis tests (Mann-Whitney U, chi-square) on delivery performance.
+
+**Key findings:**
+- **Olist is a one-time-purchase business:** only **3.0%** of customers made a 2nd purchase, and just **2.3%** within 90 days.
+- **Repeat buying happens fast or not at all:** repeat buyers took a median of **28 days** to come back; **51%** returned within 30 days.
+- **Late delivery destroys ratings:** late orders average **2.27★ vs 4.29★** on time, and the 1-star share jumps from **7% to 54%** (p < 0.001).
+- **A late first order costs repeat business:** customers whose first order arrived late came back **2.58% vs 3.06%** of the time (p = 0.035).
+- **Revenue is concentrated:** SP, RJ and MG make up **62%** of revenue; states with slower delivery get lower reviews (Spearman r = −0.50).
+- **Top category:** Health & Beauty (9.2% of revenue); the top 10 categories make up 62%.
 
 ## How to run
 1. Open the notebook in Google Colab.
