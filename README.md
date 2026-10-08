@@ -61,13 +61,15 @@ Turned **9 linked raw tables** into a clean **star schema**:
 
 **What I did:** a monthly KPI layer in SQL, cohort retention analysis, RFM segmentation into 7 action-ready segments, and hypothesis tests (Mann-Whitney U, chi-square) on delivery performance.
 
-**Key findings:**
-- **Olist is a one-time-purchase business:** only **3.0%** of customers made a 2nd purchase, and just **2.3%** within 90 days.
-- **Repeat buying happens fast or not at all:** repeat buyers took a median of **28 days** to come back; **51%** returned within 30 days.
-- **Late delivery destroys ratings:** late orders average **2.27★ vs 4.29★** on time, and the 1-star share jumps from **7% to 54%** (p < 0.001).
-- **A late first order costs repeat business:** customers whose first order arrived late came back **2.58% vs 3.06%** of the time (p = 0.035).
-- **Revenue is concentrated:** SP, RJ and MG make up **62%** of revenue; states with slower delivery get lower reviews (Spearman r = −0.50).
-- **Top category:** Health & Beauty (9.2% of revenue); the top 10 categories make up 62%.
+**Key findings (after quality checks):**
+- **Olist is a one-time-purchase business:** only **2.2%** of customers came back on a different day. (28% of apparent "repeat" customers had just split one shopping trip into several orders the same day.)
+- **Real repeat buyers take time:** median **74 days** to a 2nd purchase; **30%** return within 30 days.
+- **Missing the promised date is what triggers 1-star reviews:** late orders average **2.27★ vs 4.29★** on time, but **75%** of late-order reviews were written *before the parcel arrived*. Among reviews written after delivery, the gap is smaller but still clear: **3.53★ vs 4.29★** (effect size r = 0.30, p < 0.001).
+- **Late first order vs coming back:** customers with a late first order returned less (**1.57% vs 2.02%** within 180 days), but the difference is **not statistically significant** once cohort timing is controlled for (Mantel-Haenszel OR = 0.81, p = 0.12).
+- **Slower states get worse reviews:** across the 21 states with 300+ orders, delivery time and average review are strongly linked (Spearman r = **−0.84**, p < 0.001).
+- **Revenue is concentrated:** SP, RJ and MG make up **62%** of revenue; Health & Beauty is the top category (9.2%).
+
+**Quality checks:** 7 checks (split orders, equal observation windows, cohort timing, review timing, effect sizes, small-state bias, reconciliation) — all reconciliation checks pass, and two original findings were revised.
 
 ## How to run
 1. Open the notebook in Google Colab.
