@@ -1,8 +1,10 @@
 # Olist E-Commerce BI: Python Business Intelligence Project
 
+🔴 **Live dashboard: [olist-bi-shykeys.streamlit.app](https://olist-bi-shykeys.streamlit.app)**
+
 An end-to-end BI project on **~100,000 real orders** from Olist, Brazil's largest department-store marketplace. It takes the data from raw CSV files to a validated star schema, KPIs, customer analysis and an interactive dashboard, using only Python.
 
-**Tools:** Python · pandas · SQL (DuckDB) · Plotly · Streamlit · Google Colab
+**Tools:** Python · pandas · SQL (DuckDB) · SciPy · Plotly · Streamlit · Google Colab
 
 ---
 
@@ -18,8 +20,8 @@ An end-to-end BI project on **~100,000 real orders** from Olist, Brazil's larges
 |---|---|---|
 | 1 | Data pipeline & star schema | ✅ Done |
 | 2 | KPIs, cohort retention, RFM segmentation | ✅ Done |
-| 3 | Interactive Streamlit dashboard (live link) | 🔜 Next |
-| 4 | Executive summary & recommendations | ⏳ Planned |
+| 3 | Interactive Streamlit dashboard ([live link](https://olist-bi-shykeys.streamlit.app)) | ✅ Done |
+| 4 | Executive summary & recommendations | 🔜 Next |
 
 ## Week 1: Data pipeline & star schema
 📓 [`notebooks/01_data_pipeline_star_schema.ipynb`](notebooks/01_data_pipeline_star_schema.ipynb)
@@ -71,10 +73,26 @@ Turned **9 linked raw tables** into a clean **star schema**:
 
 **Quality checks:** 7 checks (split orders, equal observation windows, cohort timing, review timing, effect sizes, small-state bias, reconciliation) — all reconciliation checks pass, and two original findings were revised.
 
+## Week 3: Interactive dashboard
+🔴 **Live:** [olist-bi-shykeys.streamlit.app](https://olist-bi-shykeys.streamlit.app) · 📂 [`dashboard/`](dashboard/)
+
+A Streamlit app that downloads the data from Kaggle, rebuilds the same star schema and runs the same integrity checks, then serves it as an interactive dashboard:
+- **Filters:** purchase month, customer state and product category
+- **KPI tiles:** revenue, delivered orders, average order value, late %, average review
+- **Overview:** monthly revenue, late-delivery rate and review score
+- **Delivery & reviews:** review score by delivery timing, with a toggle to count only reviews written after the parcel arrived, plus delivery time vs reviews by state
+- **Customers:** cohort retention heatmap, repeat-purchase windows and RFM segments with suggested actions (using the quality-checked definitions from Week 2.1)
+- **Regions & categories:** top states and categories by revenue
+
+**Cross-checked against the notebooks:** revenue, AOV (R$ 159.79), late rate (6.8%), average review (4.16), 2.2% repeat customers, 74-day median gap and the review-by-timing table all match.
+
 ## How to run
+**Notebooks:**
 1. Open the notebook in Google Colab.
 2. Add your Kaggle credentials in **Secrets** (🔑) as `KAGGLE_API_TOKEN`.
 3. Click **Runtime → Run all**. The data downloads automatically.
+
+**Dashboard locally:** `pip install -r dashboard/requirements.txt`, put `KAGGLE_API_TOKEN = "..."` in `.streamlit/secrets.toml`, then `streamlit run dashboard/app.py`.
 
 ## Data source
 [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) on Kaggle (CC BY-NC-SA 4.0). The raw data is not stored in this repo; the notebook downloads it.
