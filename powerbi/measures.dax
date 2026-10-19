@@ -1,0 +1,102 @@
+// =====================================================================
+// Olist E-Commerce BI · Week 4 · DAX measures
+// Create a blank table called _Measures (Home → Enter data → name it
+// _Measures → Load), then add each measure below with Modeling → New measure.
+// Copy one block at a time: the line "Name =" and everything under it.
+// Same definitions as the Week 1–3 notebooks and the live dashboard.
+// =====================================================================
+
+// ---------- Sales ----------
+Revenue =
+CALCULATE ( SUM ( fact_orders[order_value] ), fact_orders[order_status] = "delivered" )
+
+Delivered Orders =
+CALCULATE ( COUNTROWS ( fact_orders ), fact_orders[order_status] = "delivered" )
+
+Average Order Value =
+DIVIDE ( [Revenue], [Delivered Orders] )
+
+Revenue Prev Month =
+CALCULATE ( [Revenue], DATEADD ( dim_date[date], -1, MONTH ) )
+
+Revenue MoM % =
+DIVIDE ( [Revenue] - [Revenue Prev Month], [Revenue Prev Month] )
+
+Revenue Share =
+DIVIDE ( [Revenue], CALCULATE ( [Revenue], ALLSELECTED ( fact_orders[customer_state] ) ) )
+
+Category Revenue =
+CALCULATE ( SUM ( fact_order_items[item_total] ), fact_orders[order_status] = "delivered" )
+
+// ---------- Delivery & reviews ----------
+Late % =
+CALCULATE ( AVERAGE ( fact_orders[is_late] ), fact_orders[order_status] = "delivered" )
+
+Average Delivery Days =
+CALCULATE ( AVERAGE ( fact_orders[delivery_days] ), fact_orders[order_status] = "delivered" )
+
+Average Review =
+CALCULATE ( AVERAGE ( fact_orders[review_score] ), fact_orders[order_status] = "delivered" )
+
+One-Star % =
+VAR reviewed =
+    CALCULATE (
+        COUNTROWS ( fact_orders ),
+        fact_orders[order_status] = "delivered",
+        NOT ISBLANK ( fact_orders[review_score] )
+    )
+VAR one_star =
+    CALCULATE (
+        COUNTROWS ( fact_orders ),
+        fact_orders[order_status] = "delivered",
+        fact_orders[review_score] = 1
+    )
+RETURN
+    DIVIDE ( one_star, reviewed )
+
+Late Reviews Before Arrival % =
+VAR late_reviewed =
+    CALCULATE (
+        COUNTROWS ( fact_orders ),
+        fact_orders[order_status] = "delivered",
+        fact_orders[is_late] = 1,
+        NOT ISBLANK ( fact_orders[review_after_delivery] )
+    )
+VAR before_arrival =
+    CALCULATE (
+        COUNTROWS ( fact_orders ),
+        fact_orders[order_status] = "delivered",
+        fact_orders[is_late] = 1,
+        fact_orders[review_after_delivery] = 0
+    )
+RETURN
+    DIVIDE ( before_arrival, late_reviewed )
+
+// ---------- Customers (whole dataset; date slicers don't filter customers) ----------
+Customers =
+COUNTROWS ( dim_customer )
+
+Repeat Customers =
+CALCULATE ( COUNTROWS ( dim_customer ), dim_customer[is_repeat] = 1 )
+
+Repeat Rate =
+DIVIDE ( [Repeat Customers], [Customers] )
+
+Customer Share =
+DIVIDE ( [Customers], CALCULATE ( [Customers], ALL ( dim_customer ), ALL ( dim_segment ) ) )
+
+Customer Revenue =
+SUM ( dim_customer[monetary] )
+
+Segment Revenue Share =
+DIVIDE ( [Customer Revenue], CALCULATE ( [Customer Revenue], ALL ( dim_customer ), ALL ( dim_segment ) ) )
+
+Average Spend per Customer =
+DIVIDE ( [Customer Revenue], [Customers] )
+
+// ---------- Executive summary ----------
+Top 3 States Revenue Share =
+DIVIDE (
+    CALCULATE ( [Revenue], fact_orders[customer_state] IN { "SP", "RJ", "MG" } ),
+    CALCULATE ( [Revenue], ALL ( fact_orders[customer_state] ) )
+)

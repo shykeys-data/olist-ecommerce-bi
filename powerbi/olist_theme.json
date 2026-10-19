@@ -1,0 +1,26 @@
+{
+  "name": "Olist BI",
+  "dataColors": ["#2E6FDB", "#C2410C", "#A9C4F5", "#15803D", "#5B6472", "#F2A07B", "#7A9CE0", "#14181F"],
+  "good": "#15803D",
+  "neutral": "#5B6472",
+  "bad": "#C2410C",
+  "maximum": "#2E6FDB",
+  "center": "#A9C4F5",
+  "minimum": "#F4F7FC",
+  "background": "#FFFFFF",
+  "foreground": "#14181F",
+  "tableAccent": "#2E6FDB",
+  "textClasses": {
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#14181F"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#14181F"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 10, "color": "#5B6472"},
+    "callout": {"fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#14181F"}
+  },
+  "visualStyles": {
+    "*": {"*": {
+      "border": [{"show": true, "color": {"solid": {"color": "#E3E7ED"}}, "radius": 8}],
+      "background": [{"show": true, "color": {"solid": {"color": "#FFFFFF"}}, "transparency": 0}]
+    }},
+    "page": {"*": {"background": [{"color": {"solid": {"color": "#F4F6F9"}}, "transparency": 0}]}}
+  }
+}
