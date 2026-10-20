@@ -13,6 +13,10 @@ CALCULATE ( SUM ( fact_orders[order_value] ), fact_orders[order_status] = "deliv
 Delivered Orders =
 CALCULATE ( COUNTROWS ( fact_orders ), fact_orders[order_status] = "delivered" )
 
+// Text version for cards, so they show the full figure (96,211) instead of "96K"
+Delivered Orders Full =
+FORMAT ( [Delivered Orders], "#,0" )
+
 Average Order Value =
 DIVIDE ( [Revenue], [Delivered Orders] )
 
@@ -59,15 +63,17 @@ VAR late_reviewed =
     CALCULATE (
         COUNTROWS ( fact_orders ),
         fact_orders[order_status] = "delivered",
-        fact_orders[is_late] = 1,
+        fact_orders[is_late] == 1,
         NOT ISBLANK ( fact_orders[review_after_delivery] )
     )
 VAR before_arrival =
     CALCULATE (
         COUNTROWS ( fact_orders ),
         fact_orders[order_status] = "delivered",
-        fact_orders[is_late] = 1,
-        fact_orders[review_after_delivery] = 0
+        fact_orders[is_late] == 1,
+        // "==" is a strict comparison: in DAX a blank "= 0" is TRUE, which would
+        // wrongly count late orders that have no review at all
+        fact_orders[review_after_delivery] == 0
     )
 RETURN
     DIVIDE ( before_arrival, late_reviewed )
@@ -75,6 +81,9 @@ RETURN
 // ---------- Customers (whole dataset; date slicers don't filter customers) ----------
 Customers =
 COUNTROWS ( dim_customer )
+
+Customers Full =
+FORMAT ( [Customers], "#,0" )
 
 Repeat Customers =
 CALCULATE ( COUNTROWS ( dim_customer ), dim_customer[is_repeat] = 1 )
