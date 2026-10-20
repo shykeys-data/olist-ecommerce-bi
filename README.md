@@ -4,7 +4,7 @@
 
 An end-to-end BI project on **~100,000 real orders** from Olist, Brazil's largest department-store marketplace. It takes the data from raw CSV files to a validated star schema, KPIs, customer analysis and an interactive dashboard, using only Python.
 
-**Tools:** Python · pandas · SQL (DuckDB) · SciPy · Plotly · Streamlit · Google Colab
+**Tools:** Python · pandas · SQL (DuckDB) · SciPy · Plotly · Streamlit · Power BI (DAX) · Google Colab
 
 ---
 
@@ -21,7 +21,7 @@ An end-to-end BI project on **~100,000 real orders** from Olist, Brazil's larges
 | 1 | Data pipeline & star schema | ✅ Done |
 | 2 | KPIs, cohort retention, RFM segmentation | ✅ Done |
 | 3 | Interactive Streamlit dashboard ([live link](https://olist-bi-shykeys.streamlit.app)) | ✅ Done |
-| 4 | Executive summary & recommendations | 🔜 Next |
+| 4 | Power BI executive report & recommendations | ✅ Done |
 
 ## Week 1: Data pipeline & star schema
 📓 [`notebooks/01_data_pipeline_star_schema.ipynb`](notebooks/01_data_pipeline_star_schema.ipynb)
@@ -86,11 +86,35 @@ A Streamlit app that downloads the data from Kaggle, rebuilds the same star sche
 
 **Cross-checked against the notebooks:** revenue, AOV (R$ 159.79), late rate (6.8%), average review (4.16), 2.2% repeat customers, 74-day median gap and the review-by-timing table all match.
 
+## Week 4: Power BI executive report & recommendations
+📊 [`powerbi/olist.pbix`](powerbi/olist.pbix) · 📄 [PDF](powerbi/olist_executive_report.pdf) · 📓 [`notebooks/03_powerbi_export.ipynb`](notebooks/03_powerbi_export.ipynb)
+
+Python prepares the data; Power BI does the business reporting. The export notebook turns the quality-checked model into 7 CSV tables (10 checks before export). In Power BI Desktop: a star schema with 5 relationships, 20+ DAX measures ([`measures.dax`](powerbi/measures.dax)), a custom theme and 4 report pages:
+
+| Page | Headline |
+|---|---|
+| Overview | Late deliveries are the biggest drag on ratings |
+| Delivery & reviews | Customers rate the wait, not the product |
+| Customers | Olist is a one-purchase business |
+| Recommendations | Fix delivery promises first, then build repeat purchases |
+
+![Power BI overview page](powerbi/report_page_1.png)
+
+**Recommendations** (full write-up: [`EXECUTIVE_SUMMARY.md`](powerbi/EXECUTIVE_SUMMARY.md)):
+1. Set honest delivery dates by region, and send review requests after delivery, not around the promised date.
+2. Warn customers early when a parcel is running late.
+3. Build a second-purchase programme in the first 30–60 days, starting with *New big spenders*; track repeat rate (2.2% today) as the main growth KPI.
+4. Protect delivery reliability in SP, RJ and MG (62.5% of revenue) before expanding in slower regions.
+
+**QC:** every card was checked against the notebooks and the live dashboard (revenue R$ 15.37M for Jan 2017–Aug 2018, AOV R$ 159.79, late 6.8%, review 4.16, 94,990 customers, 2.2% repeat, 74% of late-order reviews written before arrival). One DAX bug was caught along the way: `= 0` also matches blanks in DAX, which inflated the "before arrival" share to 77%; a strict `== 0` fixed it.
+
 ## How to run
 **Notebooks:**
 1. Open the notebook in Google Colab.
 2. Add your Kaggle credentials in **Secrets** (🔑) as `KAGGLE_API_TOKEN`.
 3. Click **Runtime → Run all**. The data downloads automatically.
+
+**Power BI:** run `notebooks/03_powerbi_export.ipynb` in Colab, then follow [`powerbi/BUILD_GUIDE.md`](powerbi/BUILD_GUIDE.md), or open `powerbi/olist.pbix` in Power BI Desktop.
 
 **Dashboard locally:** `pip install -r dashboard/requirements.txt`, put `KAGGLE_API_TOKEN = "..."` in `.streamlit/secrets.toml`, then `streamlit run dashboard/app.py`.
 
